@@ -9,7 +9,6 @@ class User(Base):
 
     phone: Mapped[int] = mapped_column(Integer)
 
-    room: Mapped[int] = mapped_column(Integer)
-
+    room: Mapped[int] = mapped_column(Integer, nullable=True)
     start_life: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
     end_life: Mapped[DateTime] = mapped_column(DateTime, nullable=True)

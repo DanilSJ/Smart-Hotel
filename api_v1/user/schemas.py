@@ -9,7 +9,7 @@ class UserSchema(BaseModel):
 
     phone: int
 
-    room: int
+    room: Optional[int] = None
 
     start_life: Optional[datetime] = None
     end_life: Optional[datetime] = None
@@ -17,3 +17,7 @@ class UserSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class RegisterSchema(BaseModel):
+    name: str
+    password: str
+    phone: int
