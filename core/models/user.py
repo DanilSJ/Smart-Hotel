@@ -11,5 +11,5 @@ class User(Base):
 
     room: Mapped[int] = mapped_column(Integer)
 
-    start_life: Mapped[DateTime] = mapped_column(DateTime)
-    end_life: Mapped[DateTime] = mapped_column(DateTime)
+    start_life: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
+    end_life: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
