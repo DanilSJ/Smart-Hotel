@@ -19,5 +19,5 @@ class UserSchema(BaseModel):
 
 class RegisterSchema(BaseModel):
     name: str
-    password: str
+    password: bytes
     phone: int
