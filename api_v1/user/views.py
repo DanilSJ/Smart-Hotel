@@ -23,3 +23,12 @@ async def create_user(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
     return await crud.create_user(session=session, user_in=user_in)
+
+
+@router.patch("/", response_model=schemas.UserSchema)
+async def update_user(
+        user_id: int,
+        user_in: schemas.UpdateSchema,
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    return await crud.update_user(session=session, user_id=user_id, user_in=user_in)
