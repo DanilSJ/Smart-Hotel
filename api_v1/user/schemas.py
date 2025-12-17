@@ -23,10 +23,3 @@ class RegisterSchema(BaseModel):
     phone: int
 
     model_config = ConfigDict(from_attributes=True)
-
-class UpdateSchema(BaseModel):
-    room: int
-    start_life: int
-    end_life: int
-
-    model_config = ConfigDict(from_attributes=True)
