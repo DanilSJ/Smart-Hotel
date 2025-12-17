@@ -1,5 +1,7 @@
-from sqlalchemy import String, Integer, DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from typing import Optional
+
+from sqlalchemy import String, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
 
 
@@ -9,6 +11,6 @@ class User(Base):
 
     phone: Mapped[int] = mapped_column(Integer)
 
-    room: Mapped[int] = mapped_column(Integer, nullable=True)
-    start_life: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
-    end_life: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
+    room: Mapped[Optional["Room"]] = relationship(
+        "Room", back_populates="user", uselist=False
+    )
