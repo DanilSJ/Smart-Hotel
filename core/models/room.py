@@ -21,6 +21,11 @@ class Room(Base):
         "User", back_populates="room", uselist=False
     )
 
+    robot: Mapped[Optional["Robot"]] = relationship(
+        "Robot", back_populates="deliver_room", uselist=False
+    )
+
     book_start: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     book_end: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
-    status: Mapped[bool] = mapped_column(Boolean)
+
+    status: Mapped[str] = mapped_column(String)
