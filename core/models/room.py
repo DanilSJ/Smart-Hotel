@@ -21,6 +21,13 @@ class Room(Base):
         "User", back_populates="room", uselist=False
     )
 
+    robot_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        ForeignKey("robots.id"),
+        nullable=True,
+        unique=True,
+    )
+
     robot: Mapped[Optional["Robot"]] = relationship(
         "Robot", back_populates="deliver_room", uselist=False
     )
