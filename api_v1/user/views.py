@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models import db_helper
 from . import schemas
 from . import crud
+
 
 router = APIRouter()
 
@@ -25,6 +26,15 @@ async def create_user(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
     return await crud.create_user(session=session, user_in=user_in)
+
+
+@router.post("/login/")
+async def login_user(
+    data: schemas.LoginSchema,
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    result = await crud.login_user(session, data.name, data.password)
+    return result
 
 
 #
