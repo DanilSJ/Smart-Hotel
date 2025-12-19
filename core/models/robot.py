@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import String, Boolean
+from sqlalchemy import String, Boolean, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
@@ -16,3 +16,10 @@ class Robot(Base):
     )
 
     status: Mapped[str] = mapped_column(String)
+
+    order_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        ForeignKey("orders.id"),
+        nullable=True,
+        unique=True,
+    )
