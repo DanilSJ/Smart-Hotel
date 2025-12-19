@@ -1,6 +1,5 @@
 from fastapi import HTTPException
 from sqlalchemy.engine import Result
-from sqlalchemy.exc import StatementError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from core.models import User
@@ -33,6 +32,17 @@ async def create_user(session: AsyncSession, user_in: schemas.RegisterSchema) ->
     session.add(user)
     await session.commit()
     return user
+
+
+async def login_user(session: AsyncSession, name: str, password: bytes) -> User:
+    stmt = select(User).where(User.name == name)
+    result: Result = await session.execute(stmt)
+
+    for el in result.scalars().all():
+        if bcrypt.checkpw(password, el.password):
+            return el
+
+    raise HTTPException(status_code=409, detail="Incorrect password")
 
 
 # async def update_user(session: AsyncSession, user_id: int, user_in: schemas.UpdateSchema) -> schemas.UserSchema:
