@@ -3,7 +3,11 @@ from typing import Annotated
 
 import jwt
 from fastapi import HTTPException, Depends
-from fastapi.security import OAuth2PasswordBearer, HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import (
+    OAuth2PasswordBearer,
+    HTTPAuthorizationCredentials,
+    HTTPBearer,
+)
 from jwt.exceptions import InvalidTokenError
 from pydantic import BaseModel
 from starlette import status
@@ -12,6 +16,7 @@ SECRET_KEY = "9d3640c25ff80a86e2b6828c2092fe7adb4ab4872f4d6ae3138ef48dc0e22cd0ff
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 security = HTTPBearer()
+
 
 class Token(BaseModel):
     access_token: str
@@ -45,9 +50,12 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
         if identification is None:
             raise credentials_exception
-        return HTTPException(status_code=status.HTTP_200_OK, detail={"user_id": identification})
+        return HTTPException(
+            status_code=status.HTTP_200_OK, detail={"user_id": identification}
+        )
     except InvalidTokenError:
         raise credentials_exception
+
 
 def get_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Извлекает Bearer токен из заголовка Authorization"""
