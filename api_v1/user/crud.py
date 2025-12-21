@@ -6,6 +6,7 @@ from core.models import User
 from . import schemas
 import bcrypt
 
+
 async def get_all_users(session: AsyncSession) -> list[User]:
     stmt = select(User).order_by(User.id)
     result: Result = await session.execute(stmt)
