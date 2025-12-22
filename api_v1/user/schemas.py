@@ -9,9 +9,6 @@ class UserSchema(BaseModel):
 
     phone: int
 
-    start_life: Optional[datetime] = None
-    end_life: Optional[datetime] = None
-
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -26,5 +23,13 @@ class RegisterSchema(BaseModel):
 class LoginSchema(BaseModel):
     name: str
     password: bytes
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UpdateSchema(BaseModel):
+    id: int
+    name: str
+    phone: int
 
     model_config = ConfigDict(from_attributes=True)
