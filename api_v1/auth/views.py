@@ -48,13 +48,12 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
             token, auth_settings.SECRET_KEY, algorithms=[auth_settings.ALGORITHM]
         )
 
-        identification = payload.get("sub")
+        user_id = payload.get("sub")
 
-        if identification is None:
+        if user_id is None:
             raise credentials_exception
-        return HTTPException(
-            status_code=status.HTTP_200_OK, detail={"user_id": identification}
-        )
+
+        return {"id": int(user_id)}
     except InvalidTokenError:
         raise credentials_exception
 
