@@ -1,6 +1,5 @@
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -64,11 +63,17 @@ async def auth_check(token: str = Depends(get_token)):
     return await get_current_user(token)
 
 
-#
-# @router.patch("/", response_model=schemas.UserSchema)
-# async def update_user(
-#         user_id: int,
-#         user_in: schemas.UpdateSchema,
-#         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-# ):
-#     return await crud.update_user(session=session, user_id=user_id, user_in=user_in)
+@router.patch("/", response_model=schemas.UserSchema)
+async def update_user(
+    user_in: schemas.UpdateSchema,
+    token: str = Depends(get_token),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    user = await get_current_user(token)
+    if user["id"] != user_in.id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+        )
+
+    return await crud.update_user(session=session, user_id=user["id"], user_in=user_in)
