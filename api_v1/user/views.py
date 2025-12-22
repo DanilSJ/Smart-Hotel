@@ -8,12 +8,12 @@ from core.models import db_helper
 from . import schemas
 from . import crud
 from api_v1.auth.views import (
-    ACCESS_TOKEN_EXPIRE_MINUTES,
     create_access_token,
     get_current_user,
     get_token,
     Token,
 )
+from core.config import auth_settings
 
 router = APIRouter()
 
@@ -51,7 +51,7 @@ async def login_user(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=auth_settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": str(user.id)}, expires_delta=access_token_expires
     )
