@@ -50,3 +50,11 @@ async def book_room(
     return await crud.book_room(
         session, data.id, data.book_start, data.book_end, data.user_id
     )
+
+
+@router.get("/{room_id}/availability/", response_model=schemas.RoomSchema)
+async def get_room_availability(
+    room_id: int,
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    return await crud.get_room_availability(session, room_id)
