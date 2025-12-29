@@ -51,3 +51,14 @@ async def book_room(
     await session.commit()
     await session.refresh(room)
     return room
+
+
+async def get_room_availability(session: AsyncSession, room_id: int) -> Room:
+    stmt = select(Room).where(Room.id == room_id)
+    result = await session.execute(stmt)
+    room = result.scalars().first()
+
+    if not room:
+        raise HTTPException(status_code=404, detail="Room not found")
+
+    return room
