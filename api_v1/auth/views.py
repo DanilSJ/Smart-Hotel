@@ -8,7 +8,7 @@ from fastapi.security import (
     HTTPAuthorizationCredentials,
     HTTPBearer,
 )
-from jwt.exceptions import InvalidTokenError
+from jwt.exceptions import InvalidTokenError, InvalidKeyError
 from pydantic import BaseModel
 from starlette import status
 from core.config import auth_settings
@@ -30,10 +30,14 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
-        to_encode, auth_settings.SECRET_KEY, algorithm=auth_settings.ALGORITHM
+        to_encode,
+        auth_settings.PRIVATE_KEY.read_text(),
+        algorithm=auth_settings.ALGORITHM,
     )
+
     return encoded_jwt
 
 
@@ -44,16 +48,23 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(
-            token, auth_settings.SECRET_KEY, algorithms=[auth_settings.ALGORITHM]
-        )
+        try:
+            payload = jwt.decode(
+                token,
+                auth_settings.PUBLIC_KEY.read_text(),
+                algorithms=[auth_settings.ALGORITHM],
+            )
 
-        user_id = payload.get("sub")
+            user_id = payload.get("sub")
 
-        if user_id is None:
-            raise credentials_exception
+            if user_id is None:
+                raise credentials_exception
 
-        return {"id": int(user_id)}
+            return {"id": int(user_id)}
+        except InvalidKeyError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            )
     except InvalidTokenError:
         raise credentials_exception
 

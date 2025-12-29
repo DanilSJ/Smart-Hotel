@@ -6,8 +6,10 @@ BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
 
 class AuthSettings(BaseSettings):
-    ALGORITHM: str = "HS256"
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "KEY")
+    ALGORITHM: str = "RS256"
+
+    PRIVATE_KEY: pathlib.Path = BASE_DIR / "certs" / "private.pem"
+    PUBLIC_KEY: pathlib.Path = BASE_DIR / "certs" / "public.pem"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
 

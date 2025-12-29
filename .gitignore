@@ -3,3 +3,5 @@
 db.sqlite3
 .env
 
+certs/private.pem
+certs/public.pem
