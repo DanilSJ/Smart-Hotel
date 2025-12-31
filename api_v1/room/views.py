@@ -7,6 +7,7 @@ from . import schemas
 from . import crud
 from api_v1.auth.views import get_token, get_current_user
 from api_v1.user.crud import get_user
+from ..utils import check_administrator
 
 router = APIRouter()
 
@@ -39,12 +40,7 @@ async def book_room(
             detail="Incorrect username or password",
         )
 
-    user = await get_user(session, user_id)
-
-    if not user.admin:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="You are not an admin"
-        )
+    await check_administrator(session, user_id)
 
     return await crud.book_room(
         session, data.id, data.book_start, data.book_end, data.user_id
