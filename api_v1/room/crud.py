@@ -5,7 +5,6 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from core.models import Room, User
-from . import schemas
 
 
 async def get_all_rooms(session: AsyncSession) -> list[Room]:
