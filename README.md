@@ -91,31 +91,6 @@
 | POST  | `/elevators/{elevator_id}/move` | Переместить лифт |
 | GET   | `/elevators/{elevator_id}/status` | Статус лифта |
 
-### Ресепшн и сервис
-| Метод | Эндпоинт | Описание |
-|-------|----------|----------|
-| POST  | `/reception/checkin` | Заезд гостя |
-| POST  | `/reception/checkout` | Выезд гостя |
-| GET   | `/reception/requests` | Текущие запросы |
-| POST  | `/reception/request` | Новый запрос |
-| PATCH | `/reception/request/{request_id}` | Обновление статуса запроса |
-
-### Меню и заказы
-| Метод | Эндпоинт | Описание |
-|-------|----------|----------|
-| GET   | `/menu` | Список блюд |
-| GET   | `/menu/{dish_id}` | Информация о блюде |
-| POST  | `/orders` | Создать заказ еды |
-| GET   | `/orders` | Текущие заказы |
-| PATCH | `/orders/{order_id}/status` | Обновить статус заказа |
-
-### Отслеживание в реальном времени
-| Метод | Эндпоинт | Описание |
-|-------|----------|----------|
-| GET   | `/status/robot/{robot_id}` | Текущая задача робота |
-| GET   | `/status/delivery/{delivery_id}` | Статус доставки |
-| GET   | `/status/elevator/{elevator_id}` | Местоположение лифта |
-
 ---
 
 ## Запуск проекта

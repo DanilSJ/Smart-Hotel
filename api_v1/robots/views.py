@@ -74,3 +74,21 @@ async def get_delivery(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
     return await crud.get_delivery(session, robot_id)
+
+
+@router.put("/deliveries/{robot_id}/complete", response_model=schemas.RobotSchema)
+async def delivery_complete(
+    robot_id: int,
+    token: str = Depends(get_token),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    user_id = await get_current_user(token)
+    if not user_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+        )
+
+    await check_administrator(session, user_id)
+
+    return await crud.delivery_complete(session, robot_id)

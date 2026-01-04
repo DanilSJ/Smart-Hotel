@@ -68,3 +68,20 @@ async def get_deliveries(session: AsyncSession) -> list[Robot]:
 
 async def get_delivery(session: AsyncSession, robot_id) -> Robot | None:
     return await session.get(Robot, robot_id)
+
+
+async def delivery_complete(session: AsyncSession, robot_id: int) -> Robot:
+    stmt = select(Robot).where(Robot.id == robot_id)
+    result = await session.execute(stmt)
+    robot = result.scalars().first()
+
+    if not robot:
+        raise HTTPException(status_code=404, detail="Robot not found")
+
+    robot.deliver = False
+    robot.deliver_status = "delivery_completed"
+
+    await session.commit()
+    await session.refresh(robot)
+
+    return robot
